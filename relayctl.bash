@@ -6,6 +6,7 @@ source "$(dirname "$0")/toggle_relay.bash"
 source "$(dirname "$0")/show_status.bash"
 source "$(dirname "$0")/live_status.bash"
 source "$(dirname "$0")/show_help.bash"
+source "$(dirname "$0")/relay_validator.bash"
 
     # Colors
     GREEN="\033[38;5;46m"
@@ -16,41 +17,64 @@ source "$(dirname "$0")/show_help.bash"
     RESET="\033[0m"
     DIM="\033[2m"
     BOLD="\033[1m"
-    
+
 # Main logic
 case "$1" in
-    minimal|popup|live-minimal)
+
+    minimal|popup|live-minimal|live|watch|monitor)
         live_status
         ;;
+
     status)
-        show_status "${2:-both}"
+        if [[ -z "$2" ]]; then
+            show_status "both"
+        elif validate_relay "$2"; then
+            show_status "$2"
+        else
+            echo -e "${RED}Error: Invalid relay. Use 1 | 2 | both${RESET}"
+            exit 1
+        fi
         ;;
+
     on|off)
         if [[ -z "$2" ]]; then
             echo -e "${RED}Error: Please specify relay (1, 2 or both)${RESET}"
             exit 1
         fi
-        set_relay "$2" "$1"
+
+        if validate_relay "$2"; then
+            set_relay "$2" "$1"
+        else
+            echo -e "${RED}Error: Invalid relay. Use 1 | 2 | both${RESET}"
+            exit 1
+        fi
         ;;
+
     toggle)
         if [[ -z "$2" ]]; then
             echo -e "${RED}Error: Please specify relay (1 or 2)${RESET}"
             exit 1
         fi
-        toggle_relay "$2"
+
+        if validate_single_relay "$2"; then
+            toggle_relay "$2"
+        else
+            echo -e "${RED}Error: Invalid relay. Use 1 or 2 only${RESET}"
+            exit 1
+        fi
         ;;
-    live|watch|monitor)
-        live_status
-        ;;
+
     help|--help|-h)
         show_help
         ;;
+
     about)
         show_banner
         ;;
+
     *)
         echo -e "${RED}Unknown command: $1${RESET}"
         show_help
+        exit 1
         ;;
-   
 esac
