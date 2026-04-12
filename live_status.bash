@@ -2,33 +2,70 @@
 
 # ====================== Clean Minimal Live Window ======================
 live_status() {
+    trap "tput cnorm; clear; exit" INT
+    tput civis
+
+    # Colors
+    GREEN="\033[38;5;46m"
+    RED="\033[38;5;196m"
+    CYAN="\033[38;5;51m"
+    PURPLE="\033[38;5;129m"
+    YELLOW="\033[38;5;226m"
+    RESET="\033[0m"
+    DIM="\033[2m"
+    BOLD="\033[1m"
+
     clear
+
+    # ======================
+    # PRINT BANNER ONCE
+    # (from external file)
+    # ======================
     show_banner
-    echo -e "${RED}Press Ctrl + C to close${RESET}\n"
+    echo ""
 
     # Save cursor position after banner
     echo -ne "\033[s"
 
+    # Spinner animation
+    spinner=("⠋" "⠙" "⠹" "⠸" "⠼" "⠴" "⠦" "⠧" "⠇" "⠏")
+    i=0
+
     while true; do
-        # Restore cursor position and update only below banner
+        # Restore position (below banner)
         echo -ne "\033[u"
 
-        # Update only status part
-        echo -e "${CYAN}Live Status ── $(date '+%Y-%m-%d %H:%M:%S')${RESET}\n"
+        # ======================
+        # LIVE CONTENT
+        # ======================
 
-        printf "${BLUE}%-10s %-15s${RESET}\n" "Relay" "State"
-        echo "──────────────────────────────────"
+        # Time
+        printf "${CYAN}Time: %s${RESET}\n" "$(date '+%Y-%m-%d %H:%M:%S')"
 
-        read relay1 relay2 < <(get_all_relay_status)
+        # Get relay status
+        read r1 r2 < <(get_all_relay_status)
 
-        [[ "$relay1" == "on" ]] && printf "%-10s ${GREEN}● ON${RESET}\n" "Relay 1" \
-                                || printf "%-10s ${RED}● OFF${RESET}\n" "Relay 1"
+        # Relay 1
+        if [[ "$r1" == "on" ]]; then
+            printf "Relay 1: ${GREEN}● ON${RESET}\n"
+        else
+            printf "Relay 1: ${RED}● OFF${RESET}\n"
+        fi
 
-        [[ "$relay2" == "on" ]] && printf "%-10s ${GREEN}● ON${RESET}\n" "Relay 2" \
-                                || printf "%-10s ${RED}● OFF${RESET}\n" "Relay 2"
+        # Relay 2
+        if [[ "$r2" == "on" ]]; then
+            printf "Relay 2: ${GREEN}● ON${RESET}\n"
+        else
+            printf "Relay 2: ${RED}● OFF${RESET}\n"
+        fi
 
-        echo -e "\n${YELLOW}Updating every 1 second...${RESET}"
+        # ======================
+        # ANIMATION LINE
+        # ======================
+        printf "${GREEN}%s Updating...${RESET}\n" "${spinner[i]}"
 
-        sleep 1
+        ((i=(i+1)%${#spinner[@]}))
+
+        sleep 0.2
     done
 }
