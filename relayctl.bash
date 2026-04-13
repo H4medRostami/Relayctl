@@ -1,12 +1,12 @@
 #!/bin/bash
-source "$(dirname "$0")/banner.bash"
-source "$(dirname "$0")/relay_status.bash"
-source "$(dirname "$0")/set_relay.bash"
-source "$(dirname "$0")/toggle_relay.bash"
-source "$(dirname "$0")/show_status.bash"
-source "$(dirname "$0")/live_status.bash"
-source "$(dirname "$0")/show_help.bash"
-source "$(dirname "$0")/relay_validator.bash"
+source "$(dirname "$0")/lib/banner.bash"
+source "$(dirname "$0")/lib/relay_status.bash"
+source "$(dirname "$0")/lib/set_relay.bash"
+source "$(dirname "$0")/lib/toggle_relay.bash"
+source "$(dirname "$0")/lib/show_status.bash"
+source "$(dirname "$0")/lib/live_status.bash"
+source "$(dirname "$0")/lib/show_help.bash"
+source "$(dirname "$0")/lib/relay_validator.bash"
 
     # Colors
     GREEN="\033[38;5;46m"
