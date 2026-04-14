@@ -1,5 +1,4 @@
-#!/bin/bash
-
+#!/usr/bin/env bash
 # ====================== Clean Minimal Live Window ======================
 live_status() {
     trap "tput cnorm; clear; exit" INT

@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 validate_relay() {
     case "$1" in
         1|2|both) return 0 ;;

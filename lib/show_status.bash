@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
     # Colors
     GREEN="\033[38;5;46m"

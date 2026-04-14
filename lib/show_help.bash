@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 show_help() {
     echo -e "${BOLD}Usage:${RESET} ./relayctl.bash <command> [argument]"
     echo ""

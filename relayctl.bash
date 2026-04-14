@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 source "$(dirname "$0")/lib/banner.bash"
 source "$(dirname "$0")/lib/relay_status.bash"
 source "$(dirname "$0")/lib/set_relay.bash"
